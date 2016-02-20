@@ -45,4 +45,6 @@ CPM_AddModule("vrm_pp"
 	GIT_REPOSITORY "${SSVDepsRoot}vrm_pp"
 	GIT_TAG "cpm")
 
+CPM_ExportAdditionalIncludeDir("./include")
+
 CPM_InitModule(${CPM_MODULE_NAME})
