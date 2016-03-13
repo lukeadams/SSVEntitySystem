@@ -1,48 +1,19 @@
-cmake_minimum_required(VERSION 2.8)
-project(SSVEntitySystem)
-#-----------------------------------------------------------------------
-# CPM configuration
-#-----------------------------------------------------------------------
-set(CPM_MODULE_NAME SSVEntitySystem)
-set(CPM_LIB_TARGET_NAME ${CPM_MODULE_NAME})
+cmake_minimum_required(VERSION 3.0)
 
-if ((DEFINED CPM_DIR) AND (DEFINED CPM_UNIQUE_ID) AND (DEFINED CPM_TARGET_NAME))
-	set(CPM_LIB_TARGET_NAME ${CPM_TARGET_NAME})
-	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CPM_DIR})
-	include(CPM)
-else()
-	set(CPM_DIR "${CMAKE_CURRENT_BINARY_DIR}/cpm-packages" CACHE TYPE STRING)
-	find_package(Git)
-	if(NOT GIT_FOUND)
-		message(FATAL_ERROR "CPM requires Git.")
-	endif()
-	if (NOT EXISTS ${CPM_DIR}/CPM.cmake)
-		message(STATUS "Cloning repo (https://github.com/iauns/cpm)")
-		execute_process(
-			COMMAND "${GIT_EXECUTABLE}" clone https://github.com/iauns/cpm ${CPM_DIR}
-			RESULT_VARIABLE error_code
-			OUTPUT_QUIET ERROR_QUIET)
-		if(error_code)
-			message(FATAL_ERROR "CPM failed to get the hash for HEAD")
-		endif()
-	endif()
-	include(${CPM_DIR}/CPM.cmake)
-endif()
+set(CPM_MODULE_NAME SSVEntitySystem)
+include(./cmake/modules/CPM-mod.cmake)
 
 SET(SSVDepsRoot "https://github.com/lukeadams/")
-
 CPM_AddModule("SSVCMake"
 	GIT_REPOSITORY "${SSVDepsRoot}SSVCMake"
 	GIT_TAG "cpm")
-SET(CMAKE_MODULE_PATH ${CPM_KV_SOURCEDIR_MAP_SSVCMake}/cmake/modules ${CMAKE_MODULE_PATH})
-include(SSVCMake)
-
-CPM_AddModule("SSVUtils" #Not workign rn
+CPM_AddModule("SSVUtils"
 	GIT_REPOSITORY "${SSVDepsRoot}SSVUtils"
 	GIT_TAG "cpm")
 
 CPM_AddModule("vrm_pp"
 	GIT_REPOSITORY "${SSVDepsRoot}vrm_pp"
 	GIT_TAG "cpm")
+CPM_ExportAdditionalIncludeDir("./include")
 
 CPM_InitModule(${CPM_MODULE_NAME})
